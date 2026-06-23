@@ -1,5 +1,21 @@
 const STORAGE_KEY = "lr_suite_gantt_proyecto_web_v1";
 
+const TASK_COLORS = ["#2563eb","#7c3aed","#059669","#d97706","#dc2626","#0891b2","#db2777"];
+
+function parseDate(str) {
+  if (!str) return null;
+  const [y, m, d] = str.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function daysDiff(a, b) {
+  return Math.round((b - a) / 86400000);
+}
+
+function fmtDate(d) {
+  return d.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
+}
+
 const defaultBoard = {
   columns: [
     { id: "week-1", label: "Semana 1" },
@@ -13,6 +29,8 @@ const defaultBoard = {
       phase: "Paso 1",
       description: "Mapeo de contenidos y productos",
       owner: "Lima Retail / Cliente",
+      startDate: "2026-06-23",
+      endDate: "2026-06-27",
       cells: { "week-1": true },
     },
     {
@@ -20,6 +38,8 @@ const defaultBoard = {
       phase: "Paso 2",
       description: "Seleccion de templates",
       owner: "Lima Retail / Melissa",
+      startDate: "2026-06-23",
+      endDate: "2026-07-04",
       cells: { "week-1": true, "week-2": true },
     },
     {
@@ -27,6 +47,8 @@ const defaultBoard = {
       phase: "Paso 3",
       description: "Validacion de funcionalidades",
       owner: "Lima Retail",
+      startDate: "2026-06-30",
+      endDate: "2026-07-04",
       cells: { "week-2": true },
     },
     {
@@ -34,6 +56,8 @@ const defaultBoard = {
       phase: "Paso 4",
       description: "Validacion de disenos por parte de Podium",
       owner: "Podium / Lima Retail",
+      startDate: "2026-06-30",
+      endDate: "2026-07-11",
       cells: { "week-2": true, "week-3": true },
     },
     {
@@ -41,6 +65,8 @@ const defaultBoard = {
       phase: "Paso 5",
       description: "Implementacion",
       owner: "Lima Retail",
+      startDate: "2026-07-07",
+      endDate: "2026-07-18",
       cells: { "week-3": true, "week-4": true },
     },
     {
@@ -48,6 +74,8 @@ const defaultBoard = {
       phase: "Paso 6",
       description: "Adaptacion movil",
       owner: "Lima Retail",
+      startDate: "2026-07-14",
+      endDate: "2026-07-18",
       cells: { "week-4": true },
     },
     {
@@ -55,6 +83,8 @@ const defaultBoard = {
       phase: "Paso 7",
       description: "Pruebas",
       owner: "Lima Retail / Cliente",
+      startDate: "2026-07-14",
+      endDate: "2026-07-18",
       cells: { "week-4": true },
     },
   ],
@@ -98,6 +128,8 @@ function loadBoard() {
         phase: task.phase || `Paso ${index + 1}`,
         description: task.description || "",
         owner: task.owner || "",
+        startDate: task.startDate || "",
+        endDate: task.endDate || "",
         cells: task.cells || {},
       })),
     };
@@ -184,6 +216,8 @@ function renderHead() {
       <th scope="col">Fase</th>
       <th scope="col">Descripcion del paso / entregable</th>
       <th scope="col">Responsable</th>
+      <th scope="col" class="date-column">Inicio</th>
+      <th scope="col" class="date-column">Fin</th>
       ${timelineHeaders}
       <th scope="col" class="actions-column">Accion</th>
     </tr>
@@ -224,6 +258,12 @@ function renderTable() {
           <td class="owner-cell">
             <input class="table-input" value="${escapeHtml(task.owner)}" data-field="owner" data-task-id="${task.id}" aria-label="Responsable">
           </td>
+          <td class="date-cell">
+            <input class="table-input date-input" type="date" value="${escapeHtml(task.startDate || "")}" data-field="startDate" data-task-id="${task.id}" aria-label="Fecha de inicio">
+          </td>
+          <td class="date-cell">
+            <input class="table-input date-input" type="date" value="${escapeHtml(task.endDate || "")}" data-field="endDate" data-task-id="${task.id}" aria-label="Fecha de fin">
+          </td>
           ${cells}
           <td class="row-actions">
             <button class="row-delete" type="button" data-task-id="${task.id}" title="Eliminar fila">Borrar</button>
@@ -234,9 +274,91 @@ function renderTable() {
     .join("");
 }
 
+function renderCalendar() {
+  const calView = document.getElementById("calendar-view");
+  if (!calView) return;
+
+  const withDates = board.tasks.filter((t) => t.startDate && t.endDate);
+  if (!withDates.length) {
+    calView.innerHTML = `<p class="cal-empty">Asigna fechas de inicio y fin a las tareas para ver el cronograma.</p>`;
+    return;
+  }
+
+  const minDate = new Date(Math.min(...withDates.map((t) => parseDate(t.startDate))));
+  const maxDate = new Date(Math.max(...withDates.map((t) => parseDate(t.endDate))));
+  const span = daysDiff(minDate, maxDate) + 1;
+
+  // Ticks semanales en el eje
+  const ticks = [];
+  const cursor = new Date(minDate);
+  while (cursor <= maxDate) {
+    ticks.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 7);
+  }
+
+  const axisMarks = ticks.map((tick) => {
+    const pct = (daysDiff(minDate, tick) / span * 100).toFixed(1);
+    return `<div class="cal-mark" style="left:${pct}%">
+      <div class="cal-mark-line"></div>
+      <span>${fmtDate(tick)}</span>
+    </div>`;
+  }).join("");
+
+  const rows = board.tasks.map((task, i) => {
+    const hasDate = Boolean(task.startDate && task.endDate);
+    const color = TASK_COLORS[i % TASK_COLORS.length];
+    let barHTML;
+    if (hasDate) {
+      const s = parseDate(task.startDate);
+      const e = parseDate(task.endDate);
+      const left = (daysDiff(minDate, s) / span * 100).toFixed(1);
+      const width = ((daysDiff(s, e) + 1) / span * 100).toFixed(1);
+      barHTML = `<div class="cal-bar" style="left:${left}%;width:${width}%;background:${color}">
+        <span>${fmtDate(s)} – ${fmtDate(e)}</span>
+      </div>`;
+    } else {
+      barHTML = `<span class="cal-nodate">Sin fecha</span>`;
+    }
+    return `
+      <div class="cal-row">
+        <div class="cal-label">
+          <strong>${escapeHtml(task.phase)}</strong>
+          <small>${escapeHtml(task.description)}</small>
+        </div>
+        <div class="cal-track${hasDate ? "" : " no-bar"}">${barHTML}</div>
+      </div>`;
+  }).join("");
+
+  calView.innerHTML = `
+    <div class="cal-head">
+      <p class="eyebrow">Vista temporal</p>
+      <h3>Cronograma &nbsp;·&nbsp; ${fmtDate(minDate)} → ${fmtDate(maxDate)} &nbsp;·&nbsp; ${span} días</h3>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-axis-row">
+        <div class="cal-spacer"></div>
+        <div class="cal-axis">${axisMarks}</div>
+      </div>
+      <div class="cal-rows">${rows}</div>
+    </div>`;
+}
+
+let calendarOpen = false;
+
+function toggleCalendar() {
+  calendarOpen = !calendarOpen;
+  const calView = document.getElementById("calendar-view");
+  const btn = document.getElementById("toggle-calendar");
+  calView.classList.toggle("is-open", calendarOpen);
+  btn.classList.toggle("active", calendarOpen);
+  btn.setAttribute("aria-pressed", String(calendarOpen));
+  if (calendarOpen) renderCalendar();
+}
+
 function renderAll() {
   renderMetrics();
   renderTable();
+  if (calendarOpen) renderCalendar();
 }
 
 function findTask(taskId) {
@@ -275,6 +397,8 @@ function addRow() {
     phase: `Paso ${nextNumber}`,
     description: "Nuevo entregable",
     owner: "Lima Retail",
+    startDate: "",
+    endDate: "",
     cells: {},
   });
   saveBoard();
@@ -346,6 +470,7 @@ ganttBody.addEventListener("click", (event) => {
   if (deleteButton) deleteRow(deleteButton.dataset.taskId);
 });
 
+document.getElementById("toggle-calendar").addEventListener("click", toggleCalendar);
 addRowButton.addEventListener("click", addRow);
 addColumnButton.addEventListener("click", addColumn);
 resetBoardButton.addEventListener("click", resetBoard);

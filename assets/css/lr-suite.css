@@ -493,6 +493,18 @@ button {
   width: 96px;
 }
 
+.gantt-table th.date-column,
+.gantt-table td.date-cell {
+  width: 140px;
+  white-space: nowrap;
+}
+
+.date-input {
+  font-size: 12px;
+  padding: 4px 6px;
+  min-width: 120px;
+}
+
 .gantt-table td {
   height: 48px;
   padding: 10px;
@@ -611,6 +623,175 @@ button {
   height: 38px;
   padding-top: 7px;
   padding-bottom: 7px;
+}
+
+/* ── Calendario desplegable ───────────────────────────── */
+.calendar-panel {
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .45s ease, padding .35s ease, margin-bottom .35s ease;
+  padding: 0 28px;
+  margin-bottom: 0;
+}
+
+.calendar-panel.is-open {
+  max-height: 700px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+#toggle-calendar.active {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+.cal-head {
+  margin-bottom: 18px;
+}
+
+.cal-head h3 {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cal-grid {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.cal-axis-row {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 6px;
+}
+
+.cal-spacer {
+  flex: none;
+  width: 176px;
+}
+
+.cal-axis {
+  flex: 1;
+  position: relative;
+  height: 38px;
+  border-bottom: 2px solid var(--line);
+}
+
+.cal-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cal-mark-line {
+  width: 1px;
+  height: 14px;
+  background: var(--line);
+}
+
+.cal-mark span {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  margin-top: 3px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.cal-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-row {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  border-top: 1px solid #f1f5f9;
+  padding: 4px 0;
+}
+
+.cal-label {
+  flex: none;
+  width: 176px;
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.cal-label strong {
+  font-size: 12px;
+  color: var(--navy);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cal-label small {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cal-track {
+  flex: 1;
+  position: relative;
+  height: 32px;
+  border-left: 2px solid var(--line);
+}
+
+.cal-track.no-bar {
+  display: flex;
+  align-items: center;
+}
+
+.cal-nodate {
+  font-size: 11px;
+  color: var(--muted);
+  padding-left: 10px;
+}
+
+.cal-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 24px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0 9px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18);
+  min-width: 28px;
+}
+
+.cal-bar span {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.95);
+  white-space: nowrap;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cal-empty {
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 28px;
 }
 
 @media (max-width: 980px) {

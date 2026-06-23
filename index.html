@@ -25,6 +25,34 @@
             <small>Cronograma de trabajo</small>
           </span>
         </a>
+        <a class="module-link" href="Muhza_Homepage_Mockup.html" target="_blank">
+          <span class="module-icon" aria-hidden="true">H</span>
+          <span>
+            <strong>Homepage</strong>
+            <small>Mockup página principal</small>
+          </span>
+        </a>
+        <a class="module-link" href="Muhza_Key_Pages_Mockup.html" target="_blank">
+          <span class="module-icon" aria-hidden="true">K</span>
+          <span>
+            <strong>Key Pages</strong>
+            <small>Quiz · Ritual · PDP · Shop</small>
+          </span>
+        </a>
+        <a class="module-link" href="Muhza_Cycle_Hub_Interactive.html" target="_blank">
+          <span class="module-icon" aria-hidden="true">C</span>
+          <span>
+            <strong>Cycle Hub</strong>
+            <small>Rueda interactiva de fases</small>
+          </span>
+        </a>
+        <a class="module-link" href="muhza-cycle-quiz.html" target="_blank">
+          <span class="module-icon" aria-hidden="true">Q</span>
+          <span>
+            <strong>Cycle Quiz</strong>
+            <small>Quiz funcional del ciclo</small>
+          </span>
+        </a>
       </nav>
 
       <div class="sidebar-footer">
@@ -43,6 +71,7 @@
           <button class="secondary-button" type="button" id="add-row">Agregar fila</button>
           <button class="secondary-button" type="button" id="add-column">Agregar columna</button>
           <button class="ghost-button" type="button" id="reset-board">Restaurar base</button>
+          <button class="secondary-button" type="button" id="toggle-calendar" aria-pressed="false" title="Ver calendario de fechas">&#x1F4C5; Calendario</button>
           <span class="save-status" id="save-status">Guardado local</span>
           <button class="icon-button" type="button" id="toggle-density" aria-pressed="false" title="Cambiar densidad">D</button>
           <button class="primary-button" type="button" id="print-view">Imprimir</button>
@@ -56,6 +85,8 @@
         </div>
         <div class="metrics-grid" id="metrics-grid"></div>
       </section>
+
+      <section class="calendar-panel" id="calendar-view" aria-label="Calendario del proyecto"></section>
 
       <section class="module-toolbar" aria-label="Filtros del Gantt">
         <div class="segmented-control" role="tablist" aria-label="Vista del cronograma">
