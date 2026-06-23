@@ -70,21 +70,19 @@ button {
 }
 
 .sidebar-toggle {
-  margin-left: auto;
-  flex: none;
-  width: 28px;
-  height: 28px;
+  min-height: 40px;
+  padding: 0 14px;
   border: 1px solid var(--line);
-  background: var(--shell);
+  background: var(--surface);
   color: var(--muted);
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .15s, color .15s, transform .3s;
+  transition: background .15s, color .15s, border-color .15s;
 }
 
 .sidebar-toggle:hover {
@@ -93,9 +91,10 @@ button {
   border-color: var(--navy);
 }
 
-.sidebar.is-collapsed .sidebar-toggle {
-  transform: rotate(180deg);
-  margin-left: 0;
+.sidebar-toggle[aria-pressed="true"] {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
 }
 
 .brand-text {
