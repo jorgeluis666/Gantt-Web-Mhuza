@@ -478,6 +478,18 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.timeline-head-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gantt-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .timeline-head h3 {
   margin-top: 4px;
   font-size: 19px;

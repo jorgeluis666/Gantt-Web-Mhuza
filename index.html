@@ -69,9 +69,6 @@
         </div>
         <div class="topbar-actions" aria-label="Acciones del modulo">
           <button class="sidebar-toggle" type="button" id="sidebar-toggle" aria-pressed="false" title="Plegar menú">&#9776;</button>
-          <button class="secondary-button" type="button" id="add-row">Agregar fila</button>
-          <button class="secondary-button" type="button" id="add-column">Agregar columna</button>
-          <button class="ghost-button" type="button" id="reset-board">Restaurar base</button>
           <button class="secondary-button" type="button" id="toggle-calendar" aria-pressed="false" title="Ver calendario de fechas">&#x1F4C5; Calendario</button>
           <span class="save-status" id="save-status">Guardado local</span>
           <button class="icon-button" type="button" id="toggle-density" aria-pressed="false" title="Cambiar densidad">D</button>
@@ -137,9 +134,16 @@
             <p class="eyebrow">Plan de 4 semanas</p>
             <h3>Fases y responsables</h3>
           </div>
-          <div class="legend" aria-label="Leyenda">
-            <span><i class="dot planned"></i>Programado</span>
-            <span><i class="dot overlap"></i>Solape</span>
+          <div class="timeline-head-right">
+            <div class="legend" aria-label="Leyenda">
+              <span><i class="dot planned"></i>Programado</span>
+              <span><i class="dot overlap"></i>Solape</span>
+            </div>
+            <div class="gantt-actions">
+              <button class="secondary-button" type="button" id="add-row">+ Fila</button>
+              <button class="secondary-button" type="button" id="add-column">+ Columna</button>
+              <button class="ghost-button" type="button" id="reset-board">Restaurar</button>
+            </div>
           </div>
         </div>
 
