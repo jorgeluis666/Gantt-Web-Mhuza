@@ -256,7 +256,8 @@ function renderTable() {
             <input class="table-input" value="${escapeHtml(task.description)}" data-field="description" data-task-id="${task.id}" aria-label="Descripcion del entregable">
           </td>
           <td class="owner-cell">
-            <input class="table-input" value="${escapeHtml(task.owner)}" data-field="owner" data-task-id="${task.id}" aria-label="Responsable">
+            <div class="owner-display" data-task-id="${task.id}">${getOwnerChips(task.owner)}</div>
+            <input class="table-input owner-input" value="${escapeHtml(task.owner)}" data-field="owner" data-task-id="${task.id}" aria-label="Responsable" style="display:none">
           </td>
           <td class="date-cell">
             <input class="table-input date-input" type="date" value="${escapeHtml(task.startDate || "")}" data-field="startDate" data-task-id="${task.id}" aria-label="Fecha de inicio">
@@ -274,73 +275,98 @@ function renderTable() {
     .join("");
 }
 
+const MONTH_NAMES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const DAY_LABELS  = ["Lu","Ma","Mi","Ju","Vi","Sá","Do"];
+
+function getOwnerChips(owner) {
+  return owner.split("/").map((s) => {
+    s = s.trim();
+    const lc = s.toLowerCase();
+    let cls = "oc-default";
+    if (lc.includes("lima retail")) cls = "oc-lr";
+    else if (lc.includes("cliente"))   cls = "oc-client";
+    else if (lc.includes("podium"))    cls = "oc-podium";
+    else if (lc.includes("melissa"))   cls = "oc-melissa";
+    return `<span class="owner-chip ${cls}">${escapeHtml(s)}</span>`;
+  }).join("");
+}
+
 function renderCalendar() {
   const calView = document.getElementById("calendar-view");
   if (!calView) return;
 
   const withDates = board.tasks.filter((t) => t.startDate && t.endDate);
-  if (!withDates.length) {
-    calView.innerHTML = `<p class="cal-empty">Asigna fechas de inicio y fin a las tareas para ver el cronograma.</p>`;
-    return;
-  }
+  const minDate = withDates.length
+    ? new Date(Math.min(...withDates.map((t) => parseDate(t.startDate))))
+    : new Date(2026, 5, 23);
+  const maxDate = withDates.length
+    ? new Date(Math.max(...withDates.map((t) => parseDate(t.endDate))))
+    : new Date(2026, 6, 18);
 
-  const minDate = new Date(Math.min(...withDates.map((t) => parseDate(t.startDate))));
-  const maxDate = new Date(Math.max(...withDates.map((t) => parseDate(t.endDate))));
-  const span = daysDiff(minDate, maxDate) + 1;
+  // Mapa día → índices de tarea
+  const dayMap = {};
+  board.tasks.forEach((task, i) => {
+    if (!task.startDate || !task.endDate) return;
+    const s = parseDate(task.startDate);
+    const e = parseDate(task.endDate);
+    const d = new Date(s);
+    while (d <= e) {
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+      (dayMap[key] = dayMap[key] || []).push(i);
+      d.setDate(d.getDate() + 1);
+    }
+  });
 
-  // Ticks semanales en el eje
-  const ticks = [];
-  const cursor = new Date(minDate);
-  while (cursor <= maxDate) {
-    ticks.push(new Date(cursor));
-    cursor.setDate(cursor.getDate() + 7);
-  }
+  // Meses a mostrar
+  const months = [];
+  const cur = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  const mEnd = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+  while (cur <= mEnd) { months.push(new Date(cur)); cur.setMonth(cur.getMonth() + 1); }
 
-  const axisMarks = ticks.map((tick) => {
-    const pct = (daysDiff(minDate, tick) / span * 100).toFixed(1);
-    return `<div class="cal-mark" style="left:${pct}%">
-      <div class="cal-mark-line"></div>
-      <span>${fmtDate(tick)}</span>
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const monthsHTML = months.map((mo) => {
+    const y = mo.getFullYear(), m = mo.getMonth();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const startDow = (new Date(y, m, 1).getDay() + 6) % 7;
+
+    const hds = DAY_LABELS.map((d) => `<div class="cal-dow">${d}</div>`).join("");
+    let cells = Array.from({ length: startDow }, () => `<div class="cal-day"></div>`).join("");
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ds = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+      const idxs = dayMap[ds] || [];
+      const dots = idxs.slice(0, 5).map((i) =>
+        `<span class="cal-dot" style="background:${TASK_COLORS[i % TASK_COLORS.length]}"></span>`
+      ).join("");
+      const cls = [
+        "cal-day",
+        idxs.length ? "has-task" : "",
+        ds === todayStr ? "is-today" : "",
+      ].filter(Boolean).join(" ");
+      cells += `<div class="${cls}"><span class="cal-num">${d}</span><div class="cal-dots">${dots}</div></div>`;
+    }
+
+    return `<div class="cal-month-block">
+      <div class="cal-month-title">${MONTH_NAMES[m]} ${y}</div>
+      <div class="cal-month-grid">${hds}${cells}</div>
     </div>`;
   }).join("");
 
-  const rows = board.tasks.map((task, i) => {
-    const hasDate = Boolean(task.startDate && task.endDate);
-    const color = TASK_COLORS[i % TASK_COLORS.length];
-    let barHTML;
-    if (hasDate) {
-      const s = parseDate(task.startDate);
-      const e = parseDate(task.endDate);
-      const left = (daysDiff(minDate, s) / span * 100).toFixed(1);
-      const width = ((daysDiff(s, e) + 1) / span * 100).toFixed(1);
-      barHTML = `<div class="cal-bar" style="left:${left}%;width:${width}%;background:${color}">
-        <span>${fmtDate(s)} – ${fmtDate(e)}</span>
-      </div>`;
-    } else {
-      barHTML = `<span class="cal-nodate">Sin fecha</span>`;
-    }
-    return `
-      <div class="cal-row">
-        <div class="cal-label">
-          <strong>${escapeHtml(task.phase)}</strong>
-          <small>${escapeHtml(task.description)}</small>
-        </div>
-        <div class="cal-track${hasDate ? "" : " no-bar"}">${barHTML}</div>
-      </div>`;
-  }).join("");
+  const legend = board.tasks.map((t, i) =>
+    `<div class="cal-leg-item">
+      <span class="cal-dot" style="background:${TASK_COLORS[i % TASK_COLORS.length]}"></span>
+      <span><b>${escapeHtml(t.phase)}</b> · ${escapeHtml(t.description)}</span>
+    </div>`
+  ).join("");
 
   calView.innerHTML = `
     <div class="cal-head">
-      <p class="eyebrow">Vista temporal</p>
-      <h3>Cronograma &nbsp;·&nbsp; ${fmtDate(minDate)} → ${fmtDate(maxDate)} &nbsp;·&nbsp; ${span} días</h3>
+      <p class="eyebrow">Vista de calendario</p>
+      <h3>${MONTH_NAMES[minDate.getMonth()]} – ${MONTH_NAMES[maxDate.getMonth()]} ${maxDate.getFullYear()}</h3>
     </div>
-    <div class="cal-grid">
-      <div class="cal-axis-row">
-        <div class="cal-spacer"></div>
-        <div class="cal-axis">${axisMarks}</div>
-      </div>
-      <div class="cal-rows">${rows}</div>
-    </div>`;
+    <div class="cal-months-row">${monthsHTML}</div>
+    <div class="cal-legend-row">${legend}</div>`;
 }
 
 let calendarOpen = false;
@@ -466,9 +492,50 @@ ganttBody.addEventListener("click", (event) => {
     return;
   }
 
+  const display = event.target.closest(".owner-display");
+  if (display) {
+    const cell = display.closest("td");
+    const input = cell.querySelector(".owner-input");
+    display.style.display = "none";
+    input.style.display = "";
+    input.focus();
+    input.select();
+    return;
+  }
+
   const deleteButton = event.target.closest(".row-delete");
   if (deleteButton) deleteRow(deleteButton.dataset.taskId);
 });
+
+ganttBody.addEventListener("blur", (event) => {
+  const input = event.target.closest(".owner-input");
+  if (!input) return;
+  const cell = input.closest("td");
+  const display = cell.querySelector(".owner-display");
+  display.innerHTML = getOwnerChips(input.value);
+  display.style.display = "";
+  input.style.display = "none";
+}, true);
+
+// ── Sidebar plegable ─────────────────────────────────────
+const sidebarEl   = document.querySelector(".sidebar");
+const suiteShell  = document.querySelector(".suite-shell");
+const sidebarBtn  = document.getElementById("sidebar-toggle");
+
+function setSidebarCollapsed(collapsed) {
+  sidebarEl.classList.toggle("is-collapsed", collapsed);
+  suiteShell.classList.toggle("is-sidebar-collapsed", collapsed);
+  sidebarBtn.setAttribute("aria-pressed", String(collapsed));
+  sidebarBtn.title = collapsed ? "Expandir menú" : "Plegar menú";
+  localStorage.setItem("lr_sidebar_collapsed", String(collapsed));
+}
+
+sidebarBtn.addEventListener("click", () => {
+  setSidebarCollapsed(!sidebarEl.classList.contains("is-collapsed"));
+});
+
+// Restaurar estado guardado
+if (localStorage.getItem("lr_sidebar_collapsed") === "true") setSidebarCollapsed(true);
 
 document.getElementById("toggle-calendar").addEventListener("click", toggleCalendar);
 addRowButton.addEventListener("click", addRow);
