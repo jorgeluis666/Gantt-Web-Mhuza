@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LR-Suite | Gantt Proyecto Web</title>
+  <link rel="stylesheet" href="assets/css/lr-suite.css">
+</head>
+<body>
+  <div class="suite-shell">
+    <aside class="sidebar" aria-label="Navegacion principal">
+      <div class="brand-block">
+        <div class="brand-mark">LR</div>
+        <div>
+          <p class="suite-label">LR-Suite</p>
+          <h1>Panel de proyecto</h1>
+        </div>
+      </div>
+
+      <nav class="module-nav" aria-label="Modulos">
+        <a class="module-link active" href="#gantt-proyecto-web" aria-current="page">
+          <span class="module-icon" aria-hidden="true">G</span>
+          <span>
+            <strong>Gantt Proyecto Web</strong>
+            <small>Cronograma de trabajo</small>
+          </span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Proyecto</span>
+        <strong>Mhuza Web</strong>
+      </div>
+    </aside>
+
+    <main class="workspace" id="gantt-proyecto-web">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Modulo activo</p>
+          <h2>Gantt Proyecto Web</h2>
+        </div>
+        <div class="topbar-actions" aria-label="Acciones del modulo">
+          <button class="secondary-button" type="button" id="add-row">Agregar fila</button>
+          <button class="secondary-button" type="button" id="add-column">Agregar columna</button>
+          <button class="ghost-button" type="button" id="reset-board">Restaurar base</button>
+          <span class="save-status" id="save-status">Guardado local</span>
+          <button class="icon-button" type="button" id="toggle-density" aria-pressed="false" title="Cambiar densidad">D</button>
+          <button class="primary-button" type="button" id="print-view">Imprimir</button>
+        </div>
+      </header>
+
+      <section class="summary-band" aria-label="Resumen del cronograma">
+        <div class="summary-copy">
+          <p class="eyebrow">Cronograma de trabajo</p>
+          <h3>Planificacion secuencial de las fases del proyecto para Melissa</h3>
+        </div>
+        <div class="metrics-grid" id="metrics-grid"></div>
+      </section>
+
+      <section class="module-toolbar" aria-label="Filtros del Gantt">
+        <div class="segmented-control" role="tablist" aria-label="Vista del cronograma">
+          <button class="segment active" type="button" data-view="todos" role="tab" aria-selected="true">Todo</button>
+          <button class="segment" type="button" data-view="lima-retail" role="tab" aria-selected="false">Lima Retail</button>
+          <button class="segment" type="button" data-view="cliente" role="tab" aria-selected="false">Cliente</button>
+          <button class="segment" type="button" data-view="podium" role="tab" aria-selected="false">Podium</button>
+        </div>
+        <label class="search-field">
+          <span>Buscar</span>
+          <input id="task-search" type="search" placeholder="Fase, responsable o entregable">
+        </label>
+      </section>
+
+      <section class="timeline-panel" aria-label="Gantt del proyecto">
+        <div class="timeline-head">
+          <div>
+            <p class="eyebrow">Plan de 4 semanas</p>
+            <h3>Fases y responsables</h3>
+          </div>
+          <div class="legend" aria-label="Leyenda">
+            <span><i class="dot planned"></i>Programado</span>
+            <span><i class="dot overlap"></i>Solape</span>
+          </div>
+        </div>
+
+        <div class="gantt-wrap">
+          <table class="gantt-table">
+            <thead id="gantt-head"></thead>
+            <tbody id="gantt-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="assets/js/gantt-proyecto-web.js"></script>
+</body>
+</html>

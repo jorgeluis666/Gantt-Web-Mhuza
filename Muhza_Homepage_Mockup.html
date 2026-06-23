@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhza — Homepage Mockup</title>
+<style>
+  :root{
+    --clay:#a3493e; --clay-dk:#7e342c; --clay-lt:#c97a6d;
+    --sand:#f3e9e2; --sand-lt:#faf4ef; --ink:#2b2320; --stone:#8c7b72;
+    --line:#e7d8cd; --cream:#fffdfb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--cream);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif}
+  a{color:inherit;text-decoration:none;cursor:pointer}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .btn{display:inline-block;padding:14px 30px;border-radius:40px;font-size:14px;letter-spacing:.04em;font-weight:600;transition:.2s;border:1.5px solid var(--clay)}
+  .btn-primary{background:var(--clay);color:#fff}
+  .btn-primary:hover{background:var(--clay-dk);border-color:var(--clay-dk)}
+  .btn-ghost{background:transparent;color:var(--clay)}
+  .btn-ghost:hover{background:var(--clay);color:#fff}
+  .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--stone);font-weight:600}
+  section{padding:74px 0}
+  h2.title{font-size:34px;font-weight:500;line-height:1.15;margin:10px 0 6px}
+
+  /* annotation tag */
+  .tag{position:absolute;background:var(--ink);color:#fff;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:20px;font-weight:600;z-index:5;white-space:nowrap;opacity:.92}
+
+  /* announcement + nav */
+  .announce{background:var(--clay);color:#fff;text-align:center;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px}
+  nav{position:sticky;top:0;z-index:40;background:rgba(255,253,251,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .navrow{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{font-size:26px;letter-spacing:.34em;font-weight:600;color:var(--clay)}
+  .navlinks{display:flex;gap:30px;font-size:14px;font-weight:500}
+  .navlinks a:hover{color:var(--clay)}
+  .navicons{display:flex;gap:20px;font-size:13px;align-items:center}
+  .navicons .quiz{background:var(--sand);color:var(--clay-dk);padding:8px 16px;border-radius:30px;font-weight:600}
+
+  /* hero */
+  .hero{position:relative;background:linear-gradient(135deg,#f6ede6 0%,#ecdbcf 55%,#e3c9bb 100%);overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;min-height:560px;padding-top:40px;padding-bottom:40px}
+  .hero h1{font-size:58px;line-height:1.04;font-weight:500;letter-spacing:-.01em}
+  .hero p.sub{font-size:18px;color:#5e4d44;margin:22px 0 30px;max-width:430px}
+  .hero .cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-art{position:relative;height:480px;border-radius:8px;background:
+     radial-gradient(circle at 60% 35%,#fff7f1 0%,transparent 60%),
+     linear-gradient(160deg,#cf9685,#a3493e 120%);
+     display:flex;align-items:center;justify-content:center;box-shadow:0 30px 60px -28px rgba(126,52,44,.55)}
+  .bottle{width:128px;height:300px;border-radius:18px 18px 12px 12px;background:linear-gradient(155deg,#fbf3ec,#e9d4c6);position:relative;box-shadow:inset 0 0 30px rgba(126,52,44,.12),0 20px 40px -18px rgba(0,0,0,.35)}
+  .bottle:before{content:"";position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:42px;height:30px;border-radius:6px;background:#7e342c}
+  .bottle .lbl{position:absolute;top:90px;left:50%;transform:translateX(-50%);width:96px;text-align:center}
+  .bottle .lbl .m{font-size:20px;letter-spacing:.3em;color:var(--clay);font-weight:600}
+  .bottle .lbl .d{font-size:9px;letter-spacing:.18em;color:var(--stone);margin-top:6px}
+
+  /* quiz strip */
+  .quizstrip{background:var(--ink);color:#fff;text-align:center;position:relative}
+  .quizstrip h3{font-size:27px;font-weight:500;margin-bottom:8px}
+  .quizstrip p{color:#d9cabf;margin-bottom:22px}
+
+  /* pillars */
+  .pillars{background:var(--sand-lt)}
+  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;margin-top:30px}
+  .pill{text-align:center}
+  .pill .ic{width:54px;height:54px;border-radius:50%;background:var(--sand);border:1.5px solid var(--clay-lt);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:var(--clay);font-size:22px}
+  .pill h4{font-size:18px;font-weight:600;margin-bottom:7px}
+  .pill p{font-size:14.5px;color:#6b5b52}
+
+  /* shop by step */
+  .head-center{text-align:center;max-width:620px;margin:0 auto}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:42px}
+  .card{background:var(--cream);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:.2s;position:relative}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 34px -22px rgba(126,52,44,.4)}
+  .card .ph{height:240px;display:flex;align-items:flex-end;justify-content:center;padding:24px;position:relative}
+  .card .ph.c1{background:linear-gradient(160deg,#f4e7dd,#e7cdbd)}
+  .card .ph.c2{background:linear-gradient(160deg,#efe1d6,#d9bca9)}
+  .card .ph.c3{background:linear-gradient(160deg,#ecddd2,#cfae9b)}
+  .step-pill{position:absolute;top:14px;left:14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:#fff;color:var(--clay);padding:4px 11px;border-radius:20px;font-weight:600}
+  .mini-bottle{width:60px;height:150px;border-radius:10px 10px 7px 7px;background:linear-gradient(155deg,#fff8f2,#e6d2c4);box-shadow:0 10px 20px -10px rgba(0,0,0,.3);position:relative}
+  .mini-bottle:before{content:"";position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:24px;height:16px;border-radius:4px;background:#7e342c}
+  .card .body{padding:20px 22px 24px}
+  .card h4{font-size:19px;font-weight:600}
+  .card .desc{font-size:13.5px;color:#6b5b52;margin:6px 0 14px;min-height:38px}
+  .card .row{display:flex;align-items:center;justify-content:space-between}
+  .card .price{font-weight:600;font-size:15px}
+  .atc{background:var(--clay);color:#fff;font-size:12.5px;font-weight:600;letter-spacing:.04em;padding:9px 16px;border-radius:24px}
+  .atc:hover{background:var(--clay-dk)}
+
+  /* build ritual banner */
+  .ritual{background:linear-gradient(120deg,var(--clay),var(--clay-dk));color:#fff;text-align:center}
+  .ritual h2{font-size:36px;font-weight:500;margin-bottom:10px}
+  .ritual p{color:#f3dcd4;margin-bottom:24px;font-size:16px}
+  .ritual .btn{border-color:#fff;background:#fff;color:var(--clay)}
+  .ritual .btn:hover{background:transparent;color:#fff}
+
+  /* cycle wheel */
+  .cycle{background:var(--sand-lt);position:relative}
+  .cyclegrid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;margin-top:24px}
+  .phaselist{display:flex;flex-direction:column;gap:14px}
+  .phase{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:10px;background:var(--cream);border:1px solid var(--line)}
+  .phase .dot{width:14px;height:14px;border-radius:50%;margin-top:5px;flex:none}
+  .phase h5{font-size:16px;font-weight:600}
+  .phase span{font-size:13px;color:#6b5b52}
+
+  /* proof */
+  .proof{text-align:center}
+  .press{display:flex;justify-content:center;gap:46px;flex-wrap:wrap;margin:34px 0 14px;align-items:center}
+  .press .logo{font-size:21px;font-weight:600;letter-spacing:.04em;color:var(--clay-dk);opacity:.8;font-family:"Iowan Old Style",Georgia,serif}
+  .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:30px}
+  .quote{background:var(--sand-lt);border:1px solid var(--line);border-radius:10px;padding:26px 24px;text-align:left}
+  .quote p{font-size:14.5px;font-style:italic;color:#4f413a}
+  .quote .src{display:block;margin-top:14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);font-weight:600;font-style:normal}
+  .stars{color:var(--clay);letter-spacing:3px;font-size:15px;margin-bottom:8px}
+
+  /* founder */
+  .founder{background:var(--sand)}
+  .fgrid{display:grid;grid-template-columns:.9fr 1.1fr;gap:46px;align-items:center}
+  .fart{height:340px;border-radius:10px;background:linear-gradient(150deg,#d8b6a4,#a3493e);box-shadow:0 24px 44px -26px rgba(126,52,44,.5)}
+  .founder h2{font-size:30px;font-weight:500;margin:8px 0 16px}
+  .founder p{color:#5e4d44;font-size:15.5px;margin-bottom:16px;max-width:480px}
+
+  /* email */
+  .email{background:var(--ink);color:#fff;text-align:center}
+  .email h2{font-size:30px;font-weight:500;margin-bottom:8px}
+  .email p{color:#d9cabf;margin-bottom:22px}
+  .emailform{display:flex;gap:10px;max-width:440px;margin:0 auto}
+  .emailform input{flex:1;padding:14px 18px;border-radius:30px;border:none;font-size:14px}
+  .emailform .btn{background:var(--clay);color:#fff;border-color:var(--clay)}
+
+  /* footer */
+  footer{background:#231c19;padding:54px 0 30px;color:#c9b8ad}
+  .fcols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px}
+  footer .logo{color:#fff;margin-bottom:12px}
+  footer h6{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#9a877c;margin-bottom:14px}
+  footer a{display:block;font-size:14px;margin-bottom:9px;color:#d6c6bb}
+  footer a:hover{color:#fff}
+  .fbase{border-top:1px solid #3a2f2a;margin-top:38px;padding-top:20px;font-size:12px;color:#9a877c;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  .note{background:#fff4ef;border:1px dashed var(--clay-lt);color:var(--clay-dk);font-size:13px;text-align:center;padding:12px;letter-spacing:.02em}
+  @media(max-width:860px){
+    .hero .wrap,.cyclegrid,.fgrid{grid-template-columns:1fr}
+    .hero-art{height:320px}.hero h1{font-size:42px}
+    .pgrid,.cards,.quotes{grid-template-columns:1fr}
+    .navlinks{display:none}.fcols{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="note">Visual mockup — Muhza homepage concept. Placeholder art stands in for photography. Dark pills label each module.</div>
+
+<div class="announce">Free shipping on orders $75+ &nbsp;·&nbsp; Subscribe &amp; save 10%</div>
+
+<nav>
+  <div class="wrap navrow">
+    <div class="navlinks">
+      <a>Shop ▾</a><a>Build Your Ritual</a><a>The Cycle ▾</a><a>About ▾</a>
+    </div>
+    <div class="logo">MUHZA</div>
+    <div class="navicons">
+      <a class="quiz">Take the Cycle Quiz</a><a>Search</a><a>Account</a><a>Cart (0)</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="tag" style="top:18px;left:30px">1 · HERO — idea in 5 seconds + dual CTA</span>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Cycle-synced skincare</span>
+      <h1 class="serif">Skincare in sync<br>with your cycle.</h1>
+      <p class="sub">Ancient wisdom, modern science. Formulas that work <em>with</em> your skin's hormonal shifts to restore balance every day of the month.</p>
+      <div class="cta">
+        <a class="btn btn-primary">Shop the Ritual</a>
+        <a class="btn btn-ghost">Take the Cycle Quiz</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="bottle"><div class="lbl"><div class="m">MUHZA</div><div class="d">CYCLE-SYNCED</div></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- QUIZ STRIP -->
+<section class="quizstrip">
+  <span class="tag" style="top:14px;left:30px">2 · QUIZ STRIP — capture email, personalize</span>
+  <div class="wrap">
+    <h3 class="serif">Not sure where to start?</h3>
+    <p>Answer a few questions and we'll match your skin to its phase in about 60 seconds.</p>
+    <a class="btn btn-primary" style="border-color:#fff;background:#fff;color:var(--clay)">Find Your Phase →</a>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <span class="tag" style="top:14px;left:30px">3 · THE IDEA — three pillars</span>
+  <div class="wrap">
+    <div class="head-center">
+      <span class="eyebrow">Why Muhza</span>
+      <h2 class="title serif">Beauty in harmony with your body</h2>
+    </div>
+    <div class="pgrid">
+      <div class="pill"><div class="ic">◐</div><h4>Hormone-responsive</h4><p>Skin is an evolving organ. Your routine should change as your hormones do.</p></div>
+      <div class="pill"><div class="ic">❋</div><h4>Clean &amp; considered</h4><p>Ancient botanicals, modern formulation, and nothing extraneous.</p></div>
+      <div class="pill"><div class="ic">♡</div><h4>Care, not correction</h4><p>We work with your body's natural rhythm — never against it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP BY STEP -->
+<section>
+  <span class="tag" style="top:30px;left:30px">4 · SHOP BY STEP — priced add-to-cart above the fold</span>
+  <div class="wrap">
+    <div class="head-center">
+      <span class="eyebrow">The ritual</span>
+      <h2 class="title serif">Two steps. Every phase.</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="ph c1"><span class="step-pill">Step 1 · Cleanse</span><div class="mini-bottle"></div></div>
+        <div class="body">
+          <h4>Ilari Oil Cleanser</h4>
+          <p class="desc">Melts away makeup and impurities while supporting your skin barrier.</p>
+          <div class="row"><span class="price">$32</span><a class="atc">Add to Cart</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph c2"><span class="step-pill">Step 2 · Treat</span><div class="mini-bottle"></div></div>
+        <div class="body">
+          <h4>Muyu Bundle</h4>
+          <p class="desc">The cycle-synced treatment set that adapts care across the month.</p>
+          <div class="row"><span class="price">$84</span><a class="atc">Add to Cart</a></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph c3"><span class="step-pill">Save 20% · Set</span><div class="mini-bottle"></div></div>
+        <div class="body">
+          <h4>The Complete Ritual</h4>
+          <p class="desc">Cleanse + Treat together — your full foundation, bundled.</p>
+          <div class="row"><span class="price">$93 <span style="color:var(--stone);text-decoration:line-through;font-weight:400">$116</span></span><a class="atc">Add to Cart</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD RITUAL -->
+<section class="ritual">
+  <span class="tag" style="top:14px;left:30px;background:#fff;color:var(--clay)">5 · BUILD YOUR RITUAL — raise order value</span>
+  <div class="wrap">
+    <span class="eyebrow" style="color:#f3dcd4">Mix &amp; match</span>
+    <h2 class="serif">Build your routine, save up to 20%</h2>
+    <p>Pick your favorites and let the savings stack as you add each step.</p>
+    <a class="btn">Build Your Ritual →</a>
+  </div>
+</section>
+
+<!-- CYCLE WHEEL -->
+<section class="cycle">
+  <span class="tag" style="top:30px;left:30px">6 · THE 4 PHASES — teach without leaving the page</span>
+  <div class="wrap">
+    <div class="head-center">
+      <span class="eyebrow">The science, simply</span>
+      <h2 class="title serif">Your skin across the month</h2>
+    </div>
+    <div class="cyclegrid">
+      <div style="display:flex;justify-content:center">
+        <svg viewBox="0 0 300 300" width="300" height="300" aria-label="Cycle wheel">
+          <circle cx="150" cy="150" r="120" fill="none" stroke="#e7d8cd" stroke-width="34"/>
+          <path d="M150 30 A120 120 0 0 1 270 150" fill="none" stroke="#a3493e" stroke-width="34"/>
+          <path d="M270 150 A120 120 0 0 1 150 270" fill="none" stroke="#c97a6d" stroke-width="34"/>
+          <path d="M150 270 A120 120 0 0 1 30 150" fill="none" stroke="#d8b6a4" stroke-width="34"/>
+          <path d="M30 150 A120 120 0 0 1 150 30" fill="none" stroke="#7e342c" stroke-width="34"/>
+          <text x="150" y="142" text-anchor="middle" font-size="17" font-weight="600" fill="#a3493e" font-family="Georgia,serif">Cycle-</text>
+          <text x="150" y="166" text-anchor="middle" font-size="17" font-weight="600" fill="#a3493e" font-family="Georgia,serif">synced</text>
+        </svg>
+      </div>
+      <div class="phaselist">
+        <div class="phase"><span class="dot" style="background:#7e342c"></span><div><h5>Menstrual</h5><span>Skin is sensitive &amp; dry — focus on gentle hydration and barrier support.</span></div></div>
+        <div class="phase"><span class="dot" style="background:#a3493e"></span><div><h5>Follicular</h5><span>Rising estrogen, skin at its best — the moment to brighten and renew.</span></div></div>
+        <div class="phase"><span class="dot" style="background:#c97a6d"></span><div><h5>Ovulatory</h5><span>Glow peaks but oil rises — keep it balanced and lightweight.</span></div></div>
+        <div class="phase"><span class="dot" style="background:#d8b6a4"></span><div><h5>Luteal</h5><span>Progesterone climbs, breakouts likely — clarify, calm, and protect.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof">
+  <span class="tag" style="top:30px;left:30px">7 · PROOF — press + reviews, used once</span>
+  <div class="wrap">
+    <span class="eyebrow">As seen in</span>
+    <div class="press">
+      <span class="logo">Hypebae</span><span class="logo">COSMOPOLITAN</span><span class="logo">Beauty Independent</span>
+    </div>
+    <div class="quotes">
+      <div class="quote"><p>"In a sea of sameness, Muhza's cycle-synced formulas stand out — a brand that understands both hormonal nuance and emotional care."</p><span class="src">Hypebae</span></div>
+      <div class="quote"><p>"Treats skin as an evolving, hormone-responsive organ — addressing the cause, not just reacting to symptoms."</p><span class="src">Cosmopolitan</span></div>
+      <div class="quote"><div class="stars">★★★★★</div><p>"My skin finally feels calm the week before my period. I didn't know skincare could move with me like this."</p><span class="src">Verified customer</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section class="founder">
+  <span class="tag" style="top:30px;left:30px">8 · FOUNDER TEASER → Our Story</span>
+  <div class="wrap fgrid">
+    <div class="fart"></div>
+    <div>
+      <span class="eyebrow">Our story</span>
+      <h2 class="serif">Skincare that listens to your body</h2>
+      <p>Muhza was born from a simple frustration: skincare treats every day the same, but your skin doesn't. We built formulas that move with your cycle — rooted in botanical tradition, proven by modern science.</p>
+      <a class="btn btn-ghost">Read Our Story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL -->
+<section class="email">
+  <span class="tag" style="top:14px;left:30px">9 · EMAIL CAPTURE — 10% offer</span>
+  <div class="wrap">
+    <h2 class="serif">Join the Muhza circle</h2>
+    <p>Get 10% off your first ritual, plus cycle-care tips and early access to launches.</p>
+    <div class="emailform"><input placeholder="Enter your email"><a class="btn">Subscribe</a></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="logo">MUHZA</div>
+        <p style="font-size:14px;max-width:240px">Cycle-synced skincare. Beauty in harmony with nature and your body's natural rhythm.</p>
+      </div>
+      <div><h6>Shop</h6><a>Shop All</a><a>Cleanse</a><a>Treat</a><a>Build Your Ritual</a><a>Subscription</a></div>
+      <div><h6>Learn</h6><a>The Cycle</a><a>The 4 Phases</a><a>The Cycle Quiz</a><a>Journal</a><a>Our Standards</a></div>
+      <div><h6>Support</h6><a>Contact</a><a>FAQ</a><a>Shipping &amp; Returns</a><a>Account</a><a>@muhzabeauty</a></div>
+    </div>
+    <div class="fbase"><span>© 2026 Muhza</span><span>Privacy · Terms</span></div>
+  </div>
+</footer>
+
+</body>
+</html>
