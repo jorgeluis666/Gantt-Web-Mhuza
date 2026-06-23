@@ -1,0 +1,73 @@
+{
+  "columns": [
+    { "id": "week-1", "label": "Semana 1" },
+    { "id": "week-2", "label": "Semana 2" },
+    { "id": "week-3", "label": "Semana 3" },
+    { "id": "week-4", "label": "Semana 4" }
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "phase": "Paso 1",
+      "description": "Mapeo de contenidos y productos",
+      "owner": "Lima Retail / Cliente",
+      "startDate": "2026-06-25",
+      "endDate": "2026-06-27",
+      "cells": { "week-1": true }
+    },
+    {
+      "id": "task-2",
+      "phase": "Paso 2",
+      "description": "Seleccion de templates",
+      "owner": "Lima Retail / Melissa",
+      "startDate": "2026-06-29",
+      "endDate": "2026-07-04",
+      "cells": { "week-1": true, "week-2": true }
+    },
+    {
+      "id": "task-3",
+      "phase": "Paso 3",
+      "description": "Validacion de funcionalidades",
+      "owner": "Lima Retail",
+      "startDate": "2026-06-30",
+      "endDate": "2026-07-04",
+      "cells": { "week-2": true }
+    },
+    {
+      "id": "task-4",
+      "phase": "Paso 4",
+      "description": "Validacion de disenos por parte de Podium",
+      "owner": "Podium / Lima Retail",
+      "startDate": "2026-07-07",
+      "endDate": "2026-07-11",
+      "cells": { "week-2": true, "week-3": true }
+    },
+    {
+      "id": "task-5",
+      "phase": "Paso 5",
+      "description": "Implementacion",
+      "owner": "Lima Retail",
+      "startDate": "2026-07-09",
+      "endDate": "2026-07-17",
+      "cells": { "week-3": true, "week-4": true }
+    },
+    {
+      "id": "task-6",
+      "phase": "Paso 6",
+      "description": "Adaptacion movil",
+      "owner": "Lima Retail",
+      "startDate": "2026-07-21",
+      "endDate": "2026-07-24",
+      "cells": { "week-4": true }
+    },
+    {
+      "id": "task-7",
+      "phase": "Paso 7",
+      "description": "Pruebas",
+      "owner": "Lima Retail / Cliente",
+      "startDate": "2026-07-27",
+      "endDate": "2026-07-31",
+      "cells": { "week-4": true }
+    }
+  ]
+}

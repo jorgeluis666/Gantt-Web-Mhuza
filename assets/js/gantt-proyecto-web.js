@@ -1,4 +1,4 @@
-const STORAGE_KEY = "lr_suite_gantt_proyecto_web_v1";
+const STORAGE_KEY = "lr_suite_gantt_proyecto_web_v2";
 
 const TASK_COLORS = ["#2563eb","#7c3aed","#059669","#d97706","#dc2626","#0891b2","#db2777"];
 
@@ -29,7 +29,7 @@ const defaultBoard = {
       phase: "Paso 1",
       description: "Mapeo de contenidos y productos",
       owner: "Lima Retail / Cliente",
-      startDate: "2026-06-23",
+      startDate: "2026-06-25",
       endDate: "2026-06-27",
       cells: { "week-1": true },
     },
@@ -38,7 +38,7 @@ const defaultBoard = {
       phase: "Paso 2",
       description: "Seleccion de templates",
       owner: "Lima Retail / Melissa",
-      startDate: "2026-06-23",
+      startDate: "2026-06-29",
       endDate: "2026-07-04",
       cells: { "week-1": true, "week-2": true },
     },
@@ -56,7 +56,7 @@ const defaultBoard = {
       phase: "Paso 4",
       description: "Validacion de disenos por parte de Podium",
       owner: "Podium / Lima Retail",
-      startDate: "2026-06-30",
+      startDate: "2026-07-07",
       endDate: "2026-07-11",
       cells: { "week-2": true, "week-3": true },
     },
@@ -65,8 +65,8 @@ const defaultBoard = {
       phase: "Paso 5",
       description: "Implementacion",
       owner: "Lima Retail",
-      startDate: "2026-07-07",
-      endDate: "2026-07-18",
+      startDate: "2026-07-09",
+      endDate: "2026-07-17",
       cells: { "week-3": true, "week-4": true },
     },
     {
@@ -74,8 +74,8 @@ const defaultBoard = {
       phase: "Paso 6",
       description: "Adaptacion movil",
       owner: "Lima Retail",
-      startDate: "2026-07-14",
-      endDate: "2026-07-18",
+      startDate: "2026-07-21",
+      endDate: "2026-07-24",
       cells: { "week-4": true },
     },
     {
@@ -83,8 +83,8 @@ const defaultBoard = {
       phase: "Paso 7",
       description: "Pruebas",
       owner: "Lima Retail / Cliente",
-      startDate: "2026-07-14",
-      endDate: "2026-07-18",
+      startDate: "2026-07-27",
+      endDate: "2026-07-31",
       cells: { "week-4": true },
     },
   ],
@@ -103,39 +103,59 @@ const saveStatus = document.querySelector("#save-status");
 const segments = [...document.querySelectorAll(".segment")];
 
 let activeView = "todos";
-let board = loadBoard();
+let board = {};
 let saveTimer;
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function normalizeBoard(parsed) {
+  return {
+    columns: parsed.columns.map((column, index) => ({
+      id: column.id || `week-${index + 1}`,
+      label: column.label || `Semana ${index + 1}`,
+    })),
+    tasks: parsed.tasks.map((task, index) => ({
+      id: task.id || `task-${Date.now()}-${index}`,
+      phase: task.phase || `Paso ${index + 1}`,
+      description: task.description || "",
+      owner: task.owner || "",
+      startDate: task.startDate || "",
+      endDate: task.endDate || "",
+      cells: task.cells || {},
+    })),
+  };
+}
+
 function loadBoard() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return clone(defaultBoard);
+    if (!stored) return null;
     const parsed = JSON.parse(stored);
-    if (!Array.isArray(parsed.columns) || !Array.isArray(parsed.tasks)) {
-      return clone(defaultBoard);
-    }
-    return {
-      columns: parsed.columns.map((column, index) => ({
-        id: column.id || `week-${index + 1}`,
-        label: column.label || `Semana ${index + 1}`,
-      })),
-      tasks: parsed.tasks.map((task, index) => ({
-        id: task.id || `task-${Date.now()}-${index}`,
-        phase: task.phase || `Paso ${index + 1}`,
-        description: task.description || "",
-        owner: task.owner || "",
-        startDate: task.startDate || "",
-        endDate: task.endDate || "",
-        cells: task.cells || {},
-      })),
-    };
+    if (!Array.isArray(parsed.columns) || !Array.isArray(parsed.tasks)) return null;
+    return normalizeBoard(parsed);
   } catch (error) {
-    return clone(defaultBoard);
+    return null;
   }
+}
+
+async function initBoard() {
+  board = loadBoard();
+  if (!board) {
+    try {
+      const res = await fetch("data/board.json");
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.columns) && Array.isArray(data.tasks)) {
+          board = normalizeBoard(data);
+          saveBoard();
+        }
+      }
+    } catch (e) {}
+    if (!board || !board.tasks) board = clone(defaultBoard);
+  }
+  renderAll();
 }
 
 function saveBoard() {
@@ -550,4 +570,4 @@ densityButton.addEventListener("click", () => {
 
 printButton.addEventListener("click", () => window.print());
 
-renderAll();
+initBoard();
