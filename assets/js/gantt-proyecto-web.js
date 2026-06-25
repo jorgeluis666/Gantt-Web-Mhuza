@@ -263,6 +263,7 @@ function renderHead() {
       <th scope="col">Responsable</th>
       <th scope="col" class="date-column">Inicio</th>
       <th scope="col" class="date-column">Fin</th>
+      <th scope="col" class="days-column">Días restantes</th>
       ${timelineHeaders}
       <th scope="col" class="actions-column">Accion</th>
     </tr>
@@ -310,6 +311,7 @@ function renderTable() {
           <td class="date-cell">
             <input class="table-input date-input" type="date" value="${escapeHtml(task.endDate || "")}" data-field="endDate" data-task-id="${task.id}" aria-label="Fecha de fin">
           </td>
+          <td class="days-column">${getDaysRemaining(task.endDate)}</td>
           ${cells}
           <td class="row-actions">
             <button class="row-delete" type="button" data-task-id="${task.id}" title="Eliminar fila">Borrar</button>
@@ -322,6 +324,32 @@ function renderTable() {
 
 const MONTH_NAMES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 const DAY_LABELS  = ["Lu","Ma","Mi","Ju","Vi","Sá","Do"];
+
+function countWorkingDays(from, to) {
+  const sign = to >= from ? 1 : -1;
+  const [start, finish] = to >= from ? [from, to] : [to, from];
+  let count = 0;
+  const cur = new Date(start);
+  cur.setDate(cur.getDate() + 1);
+  while (cur <= finish) {
+    const dow = cur.getDay();
+    if (dow !== 0 && dow !== 6) count++;
+    cur.setDate(cur.getDate() + 1);
+  }
+  return sign * count;
+}
+
+function getDaysRemaining(endDate) {
+  if (!endDate) return `<span class="days-none">—</span>`;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const end = parseDate(endDate);
+  if (!end) return `<span class="days-none">—</span>`;
+  const diff = countWorkingDays(today, end);
+  if (diff > 5)  return `<span class="days-badge days-ok">${diff}d</span>`;
+  if (diff >= 0) return `<span class="days-badge days-soon">${diff === 0 ? "Hoy" : diff + "d"}</span>`;
+  return `<span class="days-badge days-late">${Math.abs(diff)}d</span>`;
+}
 
 function getOwnerChips(owner) {
   return owner.split("/").map((s) => {
@@ -440,6 +468,13 @@ function updateTaskField(taskId, field, value) {
   task[field] = value;
   saveBoard();
   renderMetrics();
+  if (field === "endDate") {
+    const row = ganttBody.querySelector(`tr[data-task-id="${taskId}"]`);
+    if (row) {
+      const daysCell = row.querySelector(".days-column");
+      if (daysCell) daysCell.innerHTML = getDaysRemaining(value);
+    }
+  }
 }
 
 function updateColumnLabel(columnId, value) {
@@ -517,11 +552,14 @@ ganttHead.addEventListener("input", (event) => {
   updateColumnLabel(input.dataset.columnId, input.value.trim());
 });
 
-ganttBody.addEventListener("input", (event) => {
+function handleFieldChange(event) {
   const input = event.target.closest(".table-input");
   if (!input) return;
   updateTaskField(input.dataset.taskId, input.dataset.field, input.value);
-});
+}
+
+ganttBody.addEventListener("input", handleFieldChange);
+ganttBody.addEventListener("change", handleFieldChange);
 
 ganttBody.addEventListener("click", (event) => {
   const toggle = event.target.closest(".cell-toggle");

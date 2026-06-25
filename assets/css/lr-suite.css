@@ -622,8 +622,8 @@ button {
 
 .gantt-table th {
   padding: 10px 12px;
-  color: #ffffff;
-  background: var(--navy-deep);
+  color: var(--muted);
+  background: #f1f5f9;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -788,10 +788,10 @@ button {
 
 .header-input {
   padding: 5px 4px;
-  color: #ffffff;
+  color: var(--ink);
   text-align: center;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .table-input:hover,
@@ -805,8 +805,31 @@ button {
 
 .header-input:hover,
 .header-input:focus {
+  background: rgba(0, 0, 0, 0.04);
   color: var(--ink);
 }
+
+/* ── Días restantes ───────────────────────────────────── */
+.gantt-table th.days-column,
+.gantt-table td.days-column {
+  width: 100px;
+  text-align: center;
+}
+
+.days-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.days-ok   { background: #dcfce7; color: #15803d; }
+.days-soon { background: #fef9c3; color: #a16207; }
+.days-late { background: #fee2e2; color: #b91c1c; }
+.days-none { color: var(--muted); font-size: 11px; }
 
 .row-actions {
   text-align: center;
