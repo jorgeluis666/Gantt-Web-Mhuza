@@ -8,10 +8,6 @@ function parseDate(str) {
   return new Date(y, m - 1, d);
 }
 
-function daysDiff(a, b) {
-  return Math.round((b - a) / 86400000);
-}
-
 function fmtDate(d) {
   return d.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
 }
@@ -94,17 +90,50 @@ const ganttHead = document.querySelector("#gantt-head");
 const ganttBody = document.querySelector("#gantt-body");
 const metricsGrid = document.querySelector("#metrics-grid");
 const searchInput = document.querySelector("#task-search");
-const densityButton = document.querySelector("#toggle-density");
-const printButton = document.querySelector("#print-view");
 const addRowButton = document.querySelector("#add-row");
 const addColumnButton = document.querySelector("#add-column");
-const resetBoardButton = document.querySelector("#reset-board");
-const saveStatus = document.querySelector("#save-status");
 const segments = [...document.querySelectorAll(".segment")];
 
 let activeView = "todos";
 let board = {};
-let saveTimer;
+
+// ── Historial undo/redo ───────────────────────────────────
+let history = [];
+let historyIndex = -1;
+const MAX_HISTORY = 40;
+
+function pushHistory() {
+  history = history.slice(0, historyIndex + 1);
+  history.push(clone(board));
+  if (history.length > MAX_HISTORY) history.shift();
+  historyIndex = history.length - 1;
+  updateUndoRedoButtons();
+}
+
+function undo() {
+  if (historyIndex <= 0) return;
+  historyIndex--;
+  board = clone(history[historyIndex]);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
+  renderAll();
+  updateUndoRedoButtons();
+}
+
+function redo() {
+  if (historyIndex >= history.length - 1) return;
+  historyIndex++;
+  board = clone(history[historyIndex]);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
+  renderAll();
+  updateUndoRedoButtons();
+}
+
+function updateUndoRedoButtons() {
+  const undoBtn = document.getElementById("undo-action");
+  const redoBtn = document.getElementById("redo-action");
+  if (undoBtn) undoBtn.disabled = historyIndex <= 0;
+  if (redoBtn) redoBtn.disabled = historyIndex >= history.length - 1;
+}
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
@@ -156,22 +185,18 @@ async function initBoard() {
     if (!board || !board.tasks) board = clone(defaultBoard);
   }
   renderAll();
+  pushHistory();
 }
 
 function saveBoard() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
-  saveStatus.textContent = "Guardando...";
-  window.clearTimeout(saveTimer);
-  saveTimer = window.setTimeout(() => {
-    saveStatus.textContent = "Guardado local";
-  }, 450);
 }
 
 function normalise(value) {
   return String(value)
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(/[̀-ͯ]/g, "");
 }
 
 function escapeHtml(value) {
@@ -323,7 +348,6 @@ function renderCalendar() {
     ? new Date(Math.max(...withDates.map((t) => parseDate(t.endDate))))
     : new Date(2026, 6, 18);
 
-  // Mapa día → índices de tarea
   const dayMap = {};
   board.tasks.forEach((task, i) => {
     if (!task.startDate || !task.endDate) return;
@@ -337,7 +361,6 @@ function renderCalendar() {
     }
   });
 
-  // Meses a mostrar
   const months = [];
   const cur = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
   const mEnd = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
@@ -433,6 +456,7 @@ function toggleCell(taskId, columnId) {
   task.cells[columnId] = !task.cells[columnId];
   if (!task.cells[columnId]) delete task.cells[columnId];
   saveBoard();
+  pushHistory();
   renderAll();
 }
 
@@ -448,6 +472,7 @@ function addRow() {
     cells: {},
   });
   saveBoard();
+  pushHistory();
   renderAll();
 }
 
@@ -458,6 +483,7 @@ function addColumn() {
     label: `Semana ${nextNumber}`,
   });
   saveBoard();
+  pushHistory();
   renderAll();
 }
 
@@ -465,15 +491,7 @@ function deleteRow(taskId) {
   if (board.tasks.length <= 1) return;
   board.tasks = board.tasks.filter((task) => task.id !== taskId);
   saveBoard();
-  renderAll();
-}
-
-function resetBoard() {
-  board = clone(defaultBoard);
-  saveBoard();
-  searchInput.value = "";
-  activeView = "todos";
-  updateSegments("todos");
+  pushHistory();
   renderAll();
 }
 
@@ -538,9 +556,9 @@ ganttBody.addEventListener("blur", (event) => {
 }, true);
 
 // ── Sidebar plegable ─────────────────────────────────────
-const sidebarEl   = document.querySelector(".sidebar");
-const suiteShell  = document.querySelector(".suite-shell");
-const sidebarBtn  = document.getElementById("sidebar-toggle");
+const sidebarEl  = document.querySelector(".sidebar");
+const suiteShell = document.querySelector(".suite-shell");
+const sidebarBtn = document.getElementById("sidebar-toggle");
 
 function setSidebarCollapsed(collapsed) {
   sidebarEl.classList.toggle("is-collapsed", collapsed);
@@ -554,20 +572,12 @@ sidebarBtn.addEventListener("click", () => {
   setSidebarCollapsed(!sidebarEl.classList.contains("is-collapsed"));
 });
 
-// Restaurar estado guardado
 if (localStorage.getItem("lr_sidebar_collapsed") === "true") setSidebarCollapsed(true);
 
 document.getElementById("toggle-calendar").addEventListener("click", toggleCalendar);
 addRowButton.addEventListener("click", addRow);
 addColumnButton.addEventListener("click", addColumn);
-resetBoardButton.addEventListener("click", resetBoard);
-
-densityButton.addEventListener("click", () => {
-  const pressed = densityButton.getAttribute("aria-pressed") === "true";
-  densityButton.setAttribute("aria-pressed", String(!pressed));
-  document.body.classList.toggle("compact", !pressed);
-});
-
-printButton.addEventListener("click", () => window.print());
+document.getElementById("undo-action").addEventListener("click", undo);
+document.getElementById("redo-action").addEventListener("click", redo);
 
 initBoard();

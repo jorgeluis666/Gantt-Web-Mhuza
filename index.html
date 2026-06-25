@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LR-Suite | Gantt Proyecto Web</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/lr-suite.css">
 </head>
 <body>
@@ -12,42 +15,53 @@
       <div class="brand-block">
         <div class="brand-mark">LR</div>
         <div class="brand-text">
-          <p class="suite-label">LR-Suite</p>
-          <h1>Panel de proyecto</h1>
+          <p class="suite-label">Lima Retail</p>
+          <h1>LR Suite</h1>
+          <p class="brand-desc">Panel de proyecto</p>
         </div>
       </div>
 
       <nav class="module-nav" aria-label="Modulos">
         <a class="module-link active" href="#gantt-proyecto-web" aria-current="page">
-          <span class="module-icon" aria-hidden="true">G</span>
+          <span class="module-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+          </span>
           <span>
             <strong>Gantt Proyecto Web</strong>
             <small>Cronograma de trabajo</small>
           </span>
         </a>
         <a class="module-link" href="Muhza_Homepage_Mockup.html" target="_blank">
-          <span class="module-icon" aria-hidden="true">H</span>
+          <span class="module-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </span>
           <span>
             <strong>Homepage</strong>
             <small>Mockup página principal</small>
           </span>
         </a>
         <a class="module-link" href="Muhza_Key_Pages_Mockup.html" target="_blank">
-          <span class="module-icon" aria-hidden="true">K</span>
+          <span class="module-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </span>
           <span>
             <strong>Key Pages</strong>
             <small>Quiz · Ritual · PDP · Shop</small>
           </span>
         </a>
         <a class="module-link" href="Muhza_Cycle_Hub_Interactive.html" target="_blank">
-          <span class="module-icon" aria-hidden="true">C</span>
+          <span class="module-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </span>
           <span>
             <strong>Cycle Hub</strong>
             <small>Rueda interactiva de fases</small>
           </span>
         </a>
         <a class="module-link" href="muhza-cycle-quiz.html" target="_blank">
-          <span class="module-icon" aria-hidden="true">Q</span>
+          <span class="module-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </span>
           <span>
             <strong>Cycle Quiz</strong>
             <small>Quiz funcional del ciclo</small>
@@ -56,8 +70,9 @@
       </nav>
 
       <div class="sidebar-footer">
-        <span>Proyecto</span>
-        <strong>Mhuza Web</strong>
+        <span>Módulo activo</span>
+        <strong>Gantt Proyecto Web</strong>
+        <small>Cronograma de trabajo</small>
       </div>
     </aside>
 
@@ -75,9 +90,6 @@
         </div>
         <div class="topbar-actions" aria-label="Acciones del modulo">
           <button class="secondary-button" type="button" id="toggle-calendar" aria-pressed="false" title="Ver calendario de fechas">&#x1F4C5; Calendario</button>
-          <span class="save-status" id="save-status">Guardado local</span>
-          <button class="icon-button" type="button" id="toggle-density" aria-pressed="false" title="Cambiar densidad">D</button>
-          <button class="primary-button" type="button" id="print-view">Imprimir</button>
         </div>
       </header>
 
@@ -105,12 +117,16 @@
           <div class="timeline-head-right">
             <div class="legend" aria-label="Leyenda">
               <span><i class="dot planned"></i>Programado</span>
-              <span><i class="dot overlap"></i>Solape</span>
             </div>
             <div class="gantt-actions">
               <button class="secondary-button" type="button" id="add-row">+ Fila</button>
               <button class="secondary-button" type="button" id="add-column">+ Columna</button>
-              <button class="ghost-button" type="button" id="reset-board">Restaurar</button>
+              <button class="icon-button" type="button" id="undo-action" title="Deshacer" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+              </button>
+              <button class="icon-button" type="button" id="redo-action" title="Rehacer" disabled>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
+              </button>
             </div>
           </div>
         </div>

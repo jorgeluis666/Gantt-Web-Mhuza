@@ -28,7 +28,7 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background: var(--shell);
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
   line-height: 1.45;
   letter-spacing: 0;
 }
@@ -168,13 +168,26 @@ button {
 }
 
 .brand-block .suite-label {
-  color: var(--muted);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .brand-block h1 {
-  margin: 2px 0 0;
-  font-size: 17px;
-  line-height: 1.2;
+  margin: 4px 0 2px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.brand-desc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .module-nav {
@@ -218,16 +231,15 @@ button {
   height: 34px;
   flex: none;
   border-radius: 7px;
-  color: var(--navy);
-  background: #f7fbff;
+  color: #64748b;
+  background: #f8fafc;
   border: 1px solid var(--line);
-  font-weight: 800;
 }
 
 .module-link.active .module-icon {
   color: var(--navy);
-  background: #dbeafe;
-  border-color: #9cc3ff;
+  background: #eff6ff;
+  border-color: #bfdbfe;
 }
 
 .module-link strong,
@@ -255,21 +267,31 @@ button {
 }
 
 .sidebar-footer span,
-.sidebar-footer strong {
+.sidebar-footer strong,
+.sidebar-footer small {
   display: block;
 }
 
 .sidebar-footer span {
   color: var(--navy);
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .sidebar-footer strong {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sidebar-footer small {
   margin-top: 2px;
-  font-size: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .workspace {
@@ -328,47 +350,73 @@ button {
 .secondary-button,
 .ghost-button,
 .segment {
-  min-height: 40px;
-  border-radius: 7px;
+  min-height: 34px;
+  border-radius: 8px;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
+  font-weight: 600;
+  font-size: 13px;
+  transition: background .15s, box-shadow .15s, border-color .15s, color .15s;
 }
 
 .icon-button {
-  width: 38px;
-  font-weight: 800;
+  width: 32px;
+  font-weight: 700;
+}
+
+.icon-button:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
 }
 
 .icon-button[aria-pressed="true"] {
   color: #ffffff;
   background: var(--navy);
   border-color: var(--navy);
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.3);
 }
 
 .primary-button {
-  padding: 0 16px;
+  padding: 0 14px;
   color: #ffffff;
   background: var(--navy);
   border-color: var(--navy);
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
 }
 
 .secondary-button,
 .ghost-button {
-  padding: 0 14px;
-  font-weight: 700;
+  padding: 0 12px;
 }
 
 .secondary-button {
   color: var(--navy);
   background: #eff6ff;
-  border-color: #9cc3ff;
+  border-color: #bfdbfe;
+}
+
+.secondary-button:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
 }
 
 .ghost-button {
   color: var(--muted);
   background: #ffffff;
+}
+
+.ghost-button:hover {
+  background: #f8fafc;
+  color: var(--ink);
+  border-color: #94a3b8;
 }
 
 .summary-band,
@@ -446,15 +494,21 @@ button {
 }
 
 .segment {
-  padding: 0 13px;
+  padding: 0 12px;
   color: var(--muted);
-  font-weight: 700;
+}
+
+.segment:hover {
+  background: #f1f5f9;
+  color: var(--ink);
+  border-color: #94a3b8;
 }
 
 .segment.active {
   color: #ffffff;
   background: var(--navy);
   border-color: var(--navy);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
 }
 
 .search-field {
@@ -557,7 +611,7 @@ button {
   min-width: 1080px;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .gantt-table th,
@@ -567,11 +621,13 @@ button {
 }
 
 .gantt-table th {
-  padding: 11px 12px;
+  padding: 10px 12px;
   color: #ffffff;
   background: var(--navy-deep);
-  font-size: 12px;
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .gantt-table th:nth-child(1),
@@ -614,13 +670,19 @@ button {
 }
 
 .gantt-table td {
-  height: 56px;
-  padding: 10px 12px;
+  height: 38px;
+  padding: 4px 10px;
   background: #ffffff;
+  color: var(--ink);
 }
 
 .gantt-table tbody tr:nth-child(even) td {
   background: #f8fafc;
+}
+
+.gantt-table td:nth-child(2) {
+  font-weight: 500;
+  color: var(--ink);
 }
 
 .gantt-table tbody tr.hidden {
@@ -628,8 +690,8 @@ button {
 }
 
 .phase-cell {
-  color: var(--navy);
-  font-weight: 800;
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .owner-cell {
