@@ -141,7 +141,7 @@ button {
   align-items: center;
   gap: 12px;
   padding: 4px 6px 14px;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid var(--line);
   flex-wrap: nowrap;
 }
 
@@ -187,12 +187,22 @@ button {
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 13px;
+  padding: 12px 14px;
   color: var(--ink);
   text-decoration: none;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
+}
+
+.module-link:not(.active)::after {
+  content: '›';
+  margin-left: auto;
+  flex: none;
+  font-size: 18px;
+  color: var(--muted);
+  font-weight: 400;
+  line-height: 1;
 }
 
 .module-link.active {
@@ -212,6 +222,12 @@ button {
   background: #f7fbff;
   border: 1px solid var(--line);
   font-weight: 800;
+}
+
+.module-link.active .module-icon {
+  color: var(--navy);
+  background: #dbeafe;
+  border-color: #9cc3ff;
 }
 
 .module-link strong,
@@ -247,6 +263,8 @@ button {
   color: var(--navy);
   font-weight: 800;
   font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .sidebar-footer strong {
@@ -549,7 +567,7 @@ button {
 }
 
 .gantt-table th {
-  padding: 9px 10px;
+  padding: 11px 12px;
   color: #ffffff;
   background: var(--navy-deep);
   font-size: 12px;
@@ -564,12 +582,12 @@ button {
 
 .gantt-table th:nth-child(2),
 .gantt-table td:nth-child(2) {
-  width: 32%;
+  width: 34%;
 }
 
 .gantt-table th:nth-child(3),
 .gantt-table td:nth-child(3) {
-  width: 200px;
+  width: 180px;
 }
 
 .gantt-table th:nth-child(n+4),
@@ -596,13 +614,13 @@ button {
 }
 
 .gantt-table td {
-  height: 48px;
-  padding: 10px;
+  height: 56px;
+  padding: 10px 12px;
   background: #ffffff;
 }
 
 .gantt-table tbody tr:nth-child(even) td {
-  background: #fbfdff;
+  background: #f8fafc;
 }
 
 .gantt-table tbody tr.hidden {
