@@ -153,6 +153,7 @@ function normalizeBoard(parsed) {
       startDate: task.startDate || "",
       endDate: task.endDate || "",
       cells: task.cells || {},
+      status: task.status || "active",
     })),
   };
 }
@@ -293,8 +294,10 @@ function renderTable() {
         })
         .join("");
 
+      const isDone = task.status === "done";
+      const trClass = [isHidden ? "hidden" : "", isDone ? "is-done" : ""].filter(Boolean).join(" ");
       return `
-        <tr class="${isHidden ? "hidden" : ""}" data-task-id="${task.id}">
+        <tr class="${trClass}" data-task-id="${task.id}">
           <td class="phase-cell">
             <input class="table-input short" value="${escapeHtml(task.phase)}" data-field="phase" data-task-id="${task.id}" aria-label="Fase">
           </td>
@@ -311,10 +314,15 @@ function renderTable() {
           <td class="date-cell">
             <input class="table-input date-input" type="date" value="${escapeHtml(task.endDate || "")}" data-field="endDate" data-task-id="${task.id}" aria-label="Fecha de fin">
           </td>
-          <td class="days-column">${getDaysRemaining(task.endDate)}</td>
+          <td class="days-column">${getDaysRemaining(task.endDate, isDone)}</td>
           ${cells}
           <td class="row-actions">
-            <button class="row-delete" type="button" data-task-id="${task.id}" title="Eliminar fila">Borrar</button>
+            <div class="row-actions-group">
+              <button class="row-done${isDone ? " is-done" : ""}" type="button" data-task-id="${task.id}" title="${isDone ? "Marcar como activo" : "Marcar como finalizado"}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <button class="row-delete" type="button" data-task-id="${task.id}" title="Eliminar fila">Borrar</button>
+            </div>
           </td>
         </tr>
       `;
@@ -339,7 +347,8 @@ function countWorkingDays(from, to) {
   return sign * count;
 }
 
-function getDaysRemaining(endDate) {
+function getDaysRemaining(endDate, isDone) {
+  if (isDone) return `<span class="days-badge days-done">Listo</span>`;
   if (!endDate) return `<span class="days-none">—</span>`;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -472,7 +481,7 @@ function updateTaskField(taskId, field, value) {
     const row = ganttBody.querySelector(`tr[data-task-id="${taskId}"]`);
     if (row) {
       const daysCell = row.querySelector(".days-column");
-      if (daysCell) daysCell.innerHTML = getDaysRemaining(value);
+      if (daysCell) daysCell.innerHTML = getDaysRemaining(value, task.status === "done");
     }
   }
 }
@@ -530,6 +539,15 @@ function deleteRow(taskId) {
   renderAll();
 }
 
+function toggleStatus(taskId) {
+  const task = findTask(taskId);
+  if (!task) return;
+  task.status = task.status === "done" ? "active" : "done";
+  saveBoard();
+  pushHistory();
+  renderAll();
+}
+
 function updateSegments(nextView) {
   activeView = nextView;
   segments.forEach((segment) => {
@@ -579,6 +597,9 @@ ganttBody.addEventListener("click", (event) => {
     return;
   }
 
+  const doneButton = event.target.closest(".row-done");
+  if (doneButton) { toggleStatus(doneButton.dataset.taskId); return; }
+
   const deleteButton = event.target.closest(".row-delete");
   if (deleteButton) deleteRow(deleteButton.dataset.taskId);
 });
@@ -619,3 +640,11 @@ document.getElementById("undo-action").addEventListener("click", undo);
 document.getElementById("redo-action").addEventListener("click", redo);
 
 initBoard();
+
+// Recalcula días restantes cuando el usuario vuelve a la pestaña
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) renderTable();
+});
+
+// Refresco periódico cada 5 minutos
+setInterval(renderTable, 5 * 60 * 1000);

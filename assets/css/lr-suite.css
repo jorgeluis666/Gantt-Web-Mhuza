@@ -830,10 +830,42 @@ button {
 .days-soon { background: #fef9c3; color: #a16207; }
 .days-late { background: #fee2e2; color: #b91c1c; }
 .days-none { color: var(--muted); font-size: 11px; }
+.days-done { background: #dcfce7; color: #15803d; }
+
+/* ── Estado Finalizado ────────────────────────────────── */
+.gantt-table tbody tr.is-done > td { opacity: 0.5; }
+.gantt-table tbody tr.is-done .table-input { text-decoration: line-through; color: var(--muted); }
+.gantt-table tbody tr.is-done .row-done { opacity: 1; }
 
 .row-actions {
   text-align: center;
+  white-space: nowrap;
 }
+
+.row-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+
+.row-done {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: #ffffff;
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.row-done:hover { border-color: #16a34a; color: #16a34a; }
+.row-done.is-done { background: #16a34a; border-color: #16a34a; color: #ffffff; }
 
 .row-delete {
   min-height: 32px;
