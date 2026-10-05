@@ -442,7 +442,6 @@ function renderCalendar() {
 
   calView.innerHTML = `
     <div class="cal-head">
-      <p class="eyebrow">Vista de calendario</p>
       <h3>${MONTH_NAMES[minDate.getMonth()]} – ${MONTH_NAMES[maxDate.getMonth()]} ${maxDate.getFullYear()}</h3>
     </div>
     <div class="cal-months-row">${monthsHTML}</div>
